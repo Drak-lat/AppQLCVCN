@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <!-- Hình nền chữ nhật -->
+    <path
+        android:fillColor="@color/dark_light"
+        android:pathData="M4,4 H60 V60 H4 Z"
+        android:strokeColor="@color/dark_rose"
+        android:strokeWidth="2" />
+
+    <!-- Dấu chấm than – thân trên -->
+    <path
+        android:fillColor="@color/titanium_black"
+        android:pathData="M30,16 L34,16 L34,40 L30,40 Z" />
+
+    <!-- Dấu chấm than – chấm tròn dưới -->
+    <path
+        android:fillColor="@color/titanium_black"
+        android:pathData="M30,46 A2,2 0 1,0 34,46 A2,2 0 1,0 30,46" />
+</vector>

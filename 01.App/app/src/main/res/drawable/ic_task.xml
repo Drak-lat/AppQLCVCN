@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <!-- Nền hình chữ nhật bo góc -->
+    <path
+        android:fillColor="@color/royal_cobalt"
+        android:pathData="M4,12 H60 A4,4 0 0 1 64,16 V48 A4,4 0 0 1 60,52 H4 A4,4 0 0 1 0,48 V16 A4,4 0 0 1 4,12 Z" />
+
+    <!-- Dòng 1 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,18 H52 V22 H24 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,19 A2,2 0 1,0 16.1,19 Z" />
+
+    <!-- Dòng 2 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,30 H52 V34 H24 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,31 A2,2 0 1,0 16.1,31 Z" />
+
+    <!-- Dòng 3 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,42 H52 V46 H24 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,43 A2,2 0 1,0 16.1,43 Z" />
+</vector>

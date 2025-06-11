@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="500dp"
+    android:height="500dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <!-- Đầu (hình oval) -->
+    <path
+        android:fillColor="@color/slate_blue"
+    android:pathData="M32,20 A12,12 0 1,1 32,44 A12,12 0 1,1 32,20" />
+
+    <!-- Vai (hình chữ nhật bo góc dưới) -->
+    <path
+        android:fillColor="@color/deep_space_gray"
+         android:pathData="M20,47 L49,42 Q48,52 50,54 Q36,60 32,60 Q28,60 24,56 Q20,52 20,44 Z" />
+
+</vector>

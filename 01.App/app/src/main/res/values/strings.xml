@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">QuanLyCongViecApp</string>
+    <string name="app_title">Ứng Dụng Quản Lý Công Việc Cá Nhân</string>
+    <string name="btn_priority">Priority</string>
+    <string name="btn_profile">Profile</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_task">Task</string>
+    <string name="txt_priority">Priority</string>
+    <string name="txt_profile">Profile</string>
+    <string name="txt_add">Add</string>
+    <string name="txt_task">Task</string>
+    <string name="rv_task">Danh sách nhiệm vụ</string>
+    <string name="rv_priority">Danh sách nhiệm vụ ưu tiên</string>
+    <string name="rv_add">Danh sách thêm mới</string>
+    <string name="rv_profile">Danh sách hồ sơ</string>
 </resources>
