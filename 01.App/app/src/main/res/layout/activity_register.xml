@@ -1,26 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@drawable/nen3">
 
-    <EditText
-        android:id="@+id/edtUsername"
-        android:hint="Username"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/edtPassword"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:text="Đăng ký"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+
+        <!-- Họ và tên -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="182dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="TẠO TÀI KHOẢN MỚI"
+            android:textColor="#1D6EF2"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Email -->
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_input"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+
+
+        <EditText
+            android:id="@+id/Password"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_input"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_input"
+            android:hint="Edit Password"
+            android:inputType="textPassword" />
+
+        <!-- Nút đăng ký -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đăng ký"
+            android:backgroundTint="#1D6EF2"
+            android:textColor="#FFF"
+            android:textSize="16sp"/>
+    </LinearLayout>
+</ScrollView>

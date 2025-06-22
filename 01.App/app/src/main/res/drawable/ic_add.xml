@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <!-- Dọc -->
+    <path
+        android:strokeColor="@color/emerald_teal"
+    android:strokeWidth="16"
+    android:fillColor="@android:color/transparent"
+    android:pathData="M32,5 L32,57"/>
+
+    <!-- Ngang -->
+    <path
+        android:strokeColor="@color/elegant_border"
+    android:strokeWidth="16"
+    android:fillColor="@android:color/transparent"
+    android:pathData="M5,32 L58,32"/>
+
+</vector>

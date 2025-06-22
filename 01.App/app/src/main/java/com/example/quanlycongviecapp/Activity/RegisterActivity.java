@@ -1,12 +1,17 @@
-package com.example.quanlycongviecapp;
+package com.example.quanlycongviecapp.Activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quanlycongviecapp.Model.User;
+import com.example.quanlycongviecapp.R;
+import com.example.quanlycongviecapp.Remote.ApiService;
+import com.example.quanlycongviecapp.Remote.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,7 +19,7 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText edtUsername, edtPassword;
+    private EditText edtEmail, edtPassword, edtConfirmPassword;
     private Button btnRegister;
 
     @Override
@@ -22,15 +27,25 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        edtUsername = findViewById(R.id.edtUsername);
-        edtPassword = findViewById(R.id.edtPassword);
+        // Ánh xạ các thành phần trong layout
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPassword = findViewById(R.id.Password);
+        edtConfirmPassword = findViewById(R.id.editPassword);
         btnRegister = findViewById(R.id.btnRegister);
 
         btnRegister.setOnClickListener(v -> {
-            String username = edtUsername.getText().toString().trim();
+            String email = edtEmail.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
+            String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
-            User user = new User(username, password);
+            // Kiểm tra xác nhận mật khẩu
+            if (!password.equals(confirmPassword)) {
+                Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Tạo đối tượng User chỉ với email và password
+            User user = new User(email, password);
 
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
             Call<User> call = apiService.register(user);
@@ -40,10 +55,8 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                         finish();
-
                     } else {
                         Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                     }

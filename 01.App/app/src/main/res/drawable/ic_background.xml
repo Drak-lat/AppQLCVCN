@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Lớp bóng đổ -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#20000000"/> <!-- Bóng mờ đen với opacity thấp -->
+            <corners android:radius="8dp"/> <!-- Bo góc nhẹ -->
+            <padding
+                android:bottom="8dp"
+                android:left="8dp"
+                android:right="8dp"
+                android:top="8dp"/>
+        </shape>
+    </item>
+    <!-- Lớp nền với viền ánh sáng -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1E1E1E"/> <!-- Màu nền tối giống ảnh -->
+            <stroke
+                android:width="2dp"
+                android:color="#33FFFFFF"/> <!-- Viền trắng nhạt -->
+            <corners android:radius="8dp"/> <!-- Bo góc nhẹ -->
+        </shape>
+    </item>
+</layer-list>
