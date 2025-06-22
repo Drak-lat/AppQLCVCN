@@ -22,6 +22,8 @@ namespace API.CongViec.Controllers
             if (existing != null)
                 return BadRequest("Username already exists");
 
+            user.Username = user.Email;
+
             _context.Users.Add(user);
             _context.SaveChanges();
             return Ok(new { success = true, message = "Đăng ký thành công" });
