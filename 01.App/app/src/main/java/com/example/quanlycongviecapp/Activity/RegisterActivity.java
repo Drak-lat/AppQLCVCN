@@ -1,12 +1,16 @@
-package com.example.quanlycongviecapp;
+package com.example.quanlycongviecapp.Activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+
+import com.example.quanlycongviecapp.ApiService;
+import com.example.quanlycongviecapp.R;
+import com.example.quanlycongviecapp.RetrofitClient;
+import com.example.quanlycongviecapp.Model.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;

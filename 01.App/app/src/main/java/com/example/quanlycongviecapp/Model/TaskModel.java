@@ -1,4 +1,4 @@
-package com.example.quanlycongviecapp;
+package com.example.quanlycongviecapp.Model;
 
 public class TaskModel {
     public int id;

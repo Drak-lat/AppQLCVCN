@@ -1,5 +1,8 @@
 package com.example.quanlycongviecapp;
 
+import com.example.quanlycongviecapp.Model.TaskModel;
+import com.example.quanlycongviecapp.Model.User;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

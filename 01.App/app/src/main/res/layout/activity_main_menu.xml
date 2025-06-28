@@ -7,7 +7,7 @@
     android:background="@color/titanium_black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenu">
+    tools:context=".Activity.MainMenu">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -49,7 +49,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +56,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.example.quanlycongviecapp.SquareButton
+            <com.example.quanlycongviecapp.Button.SquareButton
                 android:id="@+id/btnPriority"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
@@ -77,7 +76,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,7 +83,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.example.quanlycongviecapp.SquareButton
+            <com.example.quanlycongviecapp.Button.SquareButton
                 android:id="@+id/btnProfile"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
@@ -105,7 +103,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Add -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,7 +110,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.example.quanlycongviecapp.SquareButton
+            <com.example.quanlycongviecapp.Button.SquareButton
                 android:id="@+id/btnAdd"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
@@ -133,7 +130,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,7 +137,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.example.quanlycongviecapp.SquareButton
+            <com.example.quanlycongviecapp.Button.SquareButton
                 android:id="@+id/btnTask"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
@@ -178,20 +174,20 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTask"
+            <ListView
+                android:id="@+id/lvTask"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ic_background"
                 android:contentDescription="@string/rv_task"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPriority"
+            <ListView
+                android:id="@+id/lvPriority"
                 android:layout_width="0dp"
-                android:background="@drawable/ic_background"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/ic_background"
                 android:contentDescription="@string/rv_priority"/>
         </LinearLayout>
 
@@ -201,16 +197,16 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAdd"
+            <ListView
+                android:id="@+id/lvAdd"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ic_background"
                 android:contentDescription="@string/rv_add"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvProfile"
+            <ListView
+                android:id="@+id/lvProfile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

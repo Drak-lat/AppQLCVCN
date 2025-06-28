@@ -1,4 +1,4 @@
-package com.example.quanlycongviecapp;
+package com.example.quanlycongviecapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quanlycongviecapp.ApiService;
+import com.example.quanlycongviecapp.R;
+import com.example.quanlycongviecapp.RetrofitClient;
+import com.example.quanlycongviecapp.Model.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainMenu.class);
                         intent.putExtra("userId", response.body().getId());
                         startActivity(intent);
                         finish();
