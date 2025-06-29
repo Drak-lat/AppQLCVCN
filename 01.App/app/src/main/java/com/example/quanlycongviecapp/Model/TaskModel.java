@@ -6,4 +6,5 @@ public class TaskModel {
     public String description;
     public String dueDate;
     public int priority;
+    public String status;
 }
