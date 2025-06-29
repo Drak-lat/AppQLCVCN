@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="priorities">
+        <item>Cao</item>
+        <item>Trung bình</item>
+        <item>Thấp</item>
+    </string-array>
+</resources>
