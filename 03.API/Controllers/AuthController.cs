@@ -18,9 +18,14 @@ namespace API.CongViec.Controllers
         [HttpPost("Register")]
         public IActionResult Register([FromBody] User user)
         {
-            var existing = _context.Users.FirstOrDefault(u => u.Username == user.Username);
-            if (existing != null)
-                return BadRequest("Username already exists");
+            var emailExists = _context.Users.Any(u => u.Email == user.Email);
+            if (emailExists)
+                return Conflict(new { success = false, message = "Email đã tồn tại" });
+
+            // Kiểm tra username đã tồn tại (nếu cần)
+            var usernameExists = _context.Users.Any(u => u.Username == user.Username);
+            if (usernameExists)
+                return Conflict(new { success = false, message = "Username đã tồn tại" });
 
             user.Username = user.Email;
 
