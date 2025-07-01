@@ -12,22 +12,22 @@
         android:gravity="center_horizontal"
         android:padding="24dp">
 
-        <!-- Avatar -->
+        <!-- Avatar động -->
         <ImageView
             android:id="@+id/imgAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/anh"
+            android:src="@drawable/avatar_default"
             android:layout_marginTop="24dp"
             android:scaleType="centerCrop"
-            android:background="@drawable/anh"/>
+            android:background="@drawable/cart"/>
 
         <!-- Họ tên -->
         <TextView
             android:id="@+id/tvFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lê Thế Anh"
+            android:text="Tên người dùng"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
@@ -48,8 +48,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
             card_view:cardElevation="6dp"
             card_view:cardCornerRadius="16dp"
+            card_view:cardUseCompatPadding="true"
             android:backgroundTint="#FFF">
 
             <LinearLayout
@@ -74,7 +76,7 @@
                         android:id="@+id/tvPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0987 654 321"
+                        android:text="Số điện thoại"
                         android:textSize="17sp"
                         android:textColor="#333"/>
                 </LinearLayout>
@@ -95,7 +97,7 @@
                         android:id="@+id/tvBirthday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20/05/2000"
+                        android:text="Ngày sinh"
                         android:textSize="17sp"
                         android:textColor="#333"/>
                 </LinearLayout>
@@ -115,7 +117,7 @@
                         android:id="@+id/tvAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hà Nội, Việt Nam"
+                        android:text="Địa chỉ"
                         android:textSize="17sp"
                         android:textColor="#333"/>
                 </LinearLayout>
@@ -128,7 +130,7 @@
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="Chỉnh sửa hồ sơ"
             android:textAllCaps="false"
             android:textColor="@android:color/white"

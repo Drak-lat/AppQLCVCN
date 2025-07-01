@@ -27,14 +27,19 @@ public class MainMenu extends AppCompatActivity {
     private TaskAdapter adapterTask;
     private PriorityAdapter adapterPriority;
     private AddAdapter adapterAdd;
-    // KHÔNG cần adapterProfile nữa nếu chỉ dùng nút Profile
+
+
+    private int id; // Lưu userId để truyền qua Profile
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        // Khởi tạo RecyclerView cho Task, Priority, Add (nếu có dùng)
+        // Nhận userId từ LoginActivity
+        id = getIntent().getIntExtra("id", -1);
+
+        // Thiết lập RecyclerView cho Task, Priority, Add
         RecyclerView rvTask = findViewById(R.id.rvTask);
         rvTask.setLayoutManager(new LinearLayoutManager(this));
         RecyclerView rvPriority = findViewById(R.id.rvPriority);
@@ -44,12 +49,11 @@ public class MainMenu extends AppCompatActivity {
         adapterAdd = new AddAdapter(Collections.singletonList("Add 1"));
         rvAdd.setAdapter(adapterAdd);
 
-        // --- Gọi API cho Task và Priority ---
+        // Gọi API để lấy danh sách Task và Task theo Priority
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        int userId = 1; // Thay đổi ID thực tế nếu cần
 
         // Lấy danh sách Task
-        apiService.getTasks(userId).enqueue(new Callback<List<TaskModel>>() {
+        apiService.getTasks(id).enqueue(new Callback<List<TaskModel>>() {
             @Override
             public void onResponse(Call<List<TaskModel>> call, Response<List<TaskModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -59,11 +63,15 @@ public class MainMenu extends AppCompatActivity {
                     rvTask.setAdapter(adapterTask);
                 }
             }
-            @Override public void onFailure(Call<List<TaskModel>> call, Throwable t) { }
+
+            @Override
+            public void onFailure(Call<List<TaskModel>> call, Throwable t) {
+                // TODO: Hiển thị lỗi nếu cần
+            }
         });
 
-        // Lấy danh sách Priority Task
-        apiService.getTasksByPriority(userId).enqueue(new Callback<List<TaskModel>>() {
+        // Lấy danh sách Task ưu tiên
+        apiService.getTasksByPriority(id).enqueue(new Callback<List<TaskModel>>() {
             @Override
             public void onResponse(Call<List<TaskModel>> call, Response<List<TaskModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -73,23 +81,19 @@ public class MainMenu extends AppCompatActivity {
                     rvPriority.setAdapter(adapterPriority);
                 }
             }
-            @Override public void onFailure(Call<List<TaskModel>> call, Throwable t) { }
+
+            @Override
+            public void onFailure(Call<List<TaskModel>> call, Throwable t) {
+                // TODO: Hiển thị lỗi nếu cần
+            }
         });
 
-        // ====== XỬ LÝ SỰ KIỆN CHUYỂN SANG TRANG PROFILE ======
-
-        // 1. Ánh xạ ID nút Profile
+        // ====== XỬ LÝ NÚT PROFILE ======
         View btnProfile = findViewById(R.id.btnProfile);
-
-        // 2. Gán sự kiện click chuyển sang ProfileActivity
-        btnProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Chuyển sang màn hình Profile
-                Intent intent = new Intent(MainMenu.this, ProfileActivity.class);
-                // Nếu muốn truyền userId sang Profile, dùng intent.putExtra("userId", userId);
-                startActivity(intent);
-            }
+        btnProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(MainMenu.this, ProfileActivity.class);
+            intent.putExtra("id", id);
+            startActivity(intent);
         });
     }
 }

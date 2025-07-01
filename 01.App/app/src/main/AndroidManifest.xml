@@ -2,6 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
         android:allowBackup="true"
@@ -13,12 +16,16 @@
         android:theme="@style/Theme.QuanLyCongViecApp"
         tools:targetApi="31">
 
+
+
         <!-- Main Menu -->
         <activity android:name=".Activity.MainMenu" android:exported="true" />
 
         <!-- Đăng ký -->
         <activity android:name=".Activity.RegisterActivity" android:exported="true" />
         <activity android:name=".Activity.ProfileActivity" android:exported="true"/>
+        <activity android:name=".Activity.EditProfileActivity" />
+
 
         <!-- Đăng nhập - màn hình khởi động -->
         <activity android:name=".Activity.LoginActivity" android:exported="true">
@@ -28,4 +35,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

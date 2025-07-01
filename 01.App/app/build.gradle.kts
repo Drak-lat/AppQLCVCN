@@ -37,11 +37,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("androidx.cardview:cardview:1.0.0")
 
-    // Thêm Retrofit & CardView (dùng dấu ngoặc kép cho Kotlin DSL)
+    // Retrofit + OkHttp + Glide ĐÚNG KOTLIN DSL
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

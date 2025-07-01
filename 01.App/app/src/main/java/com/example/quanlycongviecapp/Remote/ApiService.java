@@ -10,6 +10,14 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.PUT;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Part;
 
 import java.util.List;
 
@@ -26,11 +34,17 @@ public interface ApiService {
     Call<List<TaskModel>> getTasksByPriority(@Path("userId") int userId);
 
     @GET("/api/Users/{id}")
-    Call<UserProfile> getProfile(@Path("id") int id);
+    Call<UserProfile> getUserById(@Path("id") int id);
 
     @PUT("/api/Users/{id}")
     Call<UserProfile> updateProfile(@Path("id") int id, @Body UserProfile userProfile);
 
+    @Multipart
+    @POST("Users/upload-avatar/{id}")
+    Call<ResponseBody> uploadAvatar(
+            @Path("id") int userId,
+            @Part MultipartBody.Part file
+    );
 
 
 }

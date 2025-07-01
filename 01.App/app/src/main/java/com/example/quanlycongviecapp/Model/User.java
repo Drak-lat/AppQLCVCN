@@ -1,6 +1,7 @@
 package com.example.quanlycongviecapp.Model;
+import java.io.Serializable;
 
-public class User {
+public class User  {
     private int id;
     private String username;
     private String password;
@@ -57,4 +58,6 @@ public class User {
 
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
+
+
 }

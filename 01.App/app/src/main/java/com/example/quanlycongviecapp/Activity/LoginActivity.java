@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainMenu.class);
-                        intent.putExtra("userId", response.body().getId());
+                        intent.putExtra("id", response.body().getId());
                         startActivity(intent);
                         finish();
                     } else {
