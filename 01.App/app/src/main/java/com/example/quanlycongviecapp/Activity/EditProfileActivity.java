@@ -21,7 +21,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView imgAvatar;
     private EditText edtFullName, edtEmail, edtPhone, edtBirthdate, edtAddress;
     private Button btnSaveProfile, btnChangeAvatar;
-    private int id;
+    private int userId;
     private UserProfile currentUser;
 
     @Override
@@ -38,15 +38,15 @@ public class EditProfileActivity extends AppCompatActivity {
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
         btnChangeAvatar = findViewById(R.id.btnChangeAvatar);
 
-        id = getIntent().getIntExtra("userId", -1);
-        if (id == -1) {
+        userId = getIntent().getIntExtra("userId", -1);
+        if (userId == -1) {
             Toast.makeText(this, "Không có userId, quay lại!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         // 1. Load user info trước khi cho phép sửa
-        loadUserInfo(id);
+        loadUserInfo(userId);
 
         // 2. Chỉ khi load xong currentUser != null mới được update
         btnSaveProfile.setOnClickListener(v -> {
@@ -106,7 +106,7 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser.setAddress(edtAddress.getText().toString());
 
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<UserProfile> call = apiService.updateProfile(id, currentUser);
+        Call<UserProfile> call = apiService.updateProfile(userId, currentUser);
         call.enqueue(new Callback<UserProfile>() {
             @Override
             public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {

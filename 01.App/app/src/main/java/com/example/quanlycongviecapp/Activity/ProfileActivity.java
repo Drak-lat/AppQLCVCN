@@ -23,7 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imgAvatar;
     private TextView tvFullName, tvEmail, tvPhone, tvBirthday, tvAddress;
     private Button btnEditProfile;
-    private int id;
+    private int userId; // Biến toàn cục đúng
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +38,19 @@ public class ProfileActivity extends AppCompatActivity {
         tvAddress = findViewById(R.id.tvAddress);
         btnEditProfile = findViewById(R.id.btnEditProfile);
 
-        // Log userId để kiểm tra đúng chưa
-        id = getIntent().getIntExtra("userId", -1);
-        Log.d("ProfileActivity", "userId nhận được: " + id); // kiểm tra logcat
-        if (id != -1){
-            loadUserInfo(id);
+        // NHẬN userId từ Intent VÀO biến toàn cục
+        userId = getIntent().getIntExtra("userId", -1);
+        Log.d("ProfileActivity", "userId nhận được: " + userId);
+
+        if (userId != -1) {
+            loadUserInfo(userId);
         } else {
             Toast.makeText(this, "Không có ID người dùng", Toast.LENGTH_SHORT).show();
         }
 
         btnEditProfile.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            intent.putExtra("userId", id);
+            intent.putExtra("userId", userId); // Truyền đúng giá trị userId
             startActivity(intent);
         });
     }

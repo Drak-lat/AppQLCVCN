@@ -1,5 +1,6 @@
 package com.example.quanlycongviecapp.Remote;
 
+import com.example.quanlycongviecapp.Model.LoginResponse;
 import com.example.quanlycongviecapp.Model.TaskModel;
 import com.example.quanlycongviecapp.Model.User;
 import com.example.quanlycongviecapp.Model.UserProfile;
@@ -25,8 +26,10 @@ import java.util.List;
 public interface ApiService {
     @POST("/api/Auth/Register")  // chỉnh đúng path nếu backend khác
     Call<User> register(@Body User user);
+
     @POST("/api/Auth/Login")
-    Call<User> login(@Body User user);
+    Call<LoginResponse> login(@Body User user);
+
     @GET("api/Tasks/user/{userId}")
     Call<List<TaskModel>> getTasks(@Path("userId") int userId);
 
@@ -38,6 +41,14 @@ public interface ApiService {
 
     @PUT("/api/Users/{id}")
     Call<UserProfile> updateProfile(@Path("id") int id, @Body UserProfile userProfile);
+
+    @POST("api/Tasks")
+    Call<TaskModel> createTask(@Body TaskModel taskModel);
+
+    @PUT("api/Tasks/{taskId}")
+    Call<TaskModel> updateTask(@Path("taskId") int taskId, @Body TaskModel taskModel);
+
+
 
     @Multipart
     @POST("Users/upload-avatar/{id}")

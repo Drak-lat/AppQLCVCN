@@ -2,6 +2,7 @@ package com.example.quanlycongviecapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,16 +29,16 @@ public class MainMenu extends AppCompatActivity {
     private PriorityAdapter adapterPriority;
     private AddAdapter adapterAdd;
 
-
-    private int id; // Lưu userId để truyền qua Profile
+    private int userId; // Lưu userId để truyền qua Profile
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        // Nhận userId từ LoginActivity
-        id = getIntent().getIntExtra("id", -1);
+        // NHẬN userId từ LoginActivity: PHẢI ĐÚNG KEY
+        userId = getIntent().getIntExtra("userId", -1); // Sửa lại cho đúng key
+        Log.d("MainMenu", "userId nhận được: " + userId);
 
         // Thiết lập RecyclerView cho Task, Priority, Add
         RecyclerView rvTask = findViewById(R.id.rvTask);
@@ -53,7 +54,7 @@ public class MainMenu extends AppCompatActivity {
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
         // Lấy danh sách Task
-        apiService.getTasks(id).enqueue(new Callback<List<TaskModel>>() {
+        apiService.getTasks(userId).enqueue(new Callback<List<TaskModel>>() {
             @Override
             public void onResponse(Call<List<TaskModel>> call, Response<List<TaskModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -71,7 +72,7 @@ public class MainMenu extends AppCompatActivity {
         });
 
         // Lấy danh sách Task ưu tiên
-        apiService.getTasksByPriority(id).enqueue(new Callback<List<TaskModel>>() {
+        apiService.getTasksByPriority(userId).enqueue(new Callback<List<TaskModel>>() {
             @Override
             public void onResponse(Call<List<TaskModel>> call, Response<List<TaskModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -92,7 +93,7 @@ public class MainMenu extends AppCompatActivity {
         View btnProfile = findViewById(R.id.btnProfile);
         btnProfile.setOnClickListener(v -> {
             Intent intent = new Intent(MainMenu.this, ProfileActivity.class);
-            intent.putExtra("id", id);
+            intent.putExtra("userId", userId); // Tiếp tục truyền đúng key
             startActivity(intent);
         });
     }

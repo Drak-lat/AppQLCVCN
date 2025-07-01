@@ -43,7 +43,9 @@ namespace API.CongViec.Controllers
             if (matched == null)
                 return Unauthorized("Invalid credentials");
 
-            return Ok(new { Message = "Đăng nhập thành công", UserId = matched.Id });
+            // Trả về user thực tế từ DB, KHÔNG phải object 'user' nhận từ client!
+            return Ok(new { Message = "Đăng nhập thành công", user = matched });
         }
+
     }
 }

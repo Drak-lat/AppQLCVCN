@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quanlycongviecapp.Model.LoginResponse;
 import com.example.quanlycongviecapp.Model.User;
 import com.example.quanlycongviecapp.R;
 import com.example.quanlycongviecapp.Remote.ApiService;
@@ -49,14 +50,18 @@ public class LoginActivity extends AppCompatActivity {
             User user = new User(username, password);
 
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-            Call<User> call = apiService.login(user);
-            call.enqueue(new Callback<User>() {
+// Đổi từ Call<User> sang Call<LoginResponse>
+            Call<LoginResponse> call = apiService.login(user);
+            call.enqueue(new Callback<LoginResponse>() {
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        User user = response.body().getUser(); // Lấy user thực tế từ response
+                        int userId = user.getId();
+
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainMenu.class);
-                        intent.putExtra("id", response.body().getId());
+                        intent.putExtra("userId", userId);
                         startActivity(intent);
                         finish();
                     } else {
@@ -71,10 +76,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
                     Toast.makeText(LoginActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+
         });
     }
 }
