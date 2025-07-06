@@ -1,6 +1,6 @@
 package com.example.quanlycongviecapp.Model;
 
-public class UserProfile {
+public class Account {
     private int id;
     private String fullName;
     private String email;

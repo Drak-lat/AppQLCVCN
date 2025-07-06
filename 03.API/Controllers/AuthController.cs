@@ -15,37 +15,53 @@ namespace API.CongViec.Controllers
             _context = context;
         }
 
-        [HttpPost("Register")]
-        public IActionResult Register([FromBody] User user)
+        // ĐĂNG KÝ (Register)
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] RegisterRequest req)
         {
-            var emailExists = _context.Users.Any(u => u.Email == user.Email);
+            var emailExists = _context.Users.Any(u => u.Email == req.Email);
             if (emailExists)
                 return Conflict(new { success = false, message = "Email đã tồn tại" });
 
-            // Kiểm tra username đã tồn tại (nếu cần)
-            var usernameExists = _context.Users.Any(u => u.Username == user.Username);
-            if (usernameExists)
-                return Conflict(new { success = false, message = "Username đã tồn tại" });
-
-            user.Username = user.Email;
+            // Có thể bỏ kiểm tra username, vì username sẽ = email
+            var user = new User
+            {
+                Email = req.Email,
+                Username = req.Email,
+                Password = req.Password
+            };
 
             _context.Users.Add(user);
             _context.SaveChanges();
             return Ok(new { success = true, message = "Đăng ký thành công" });
         }
 
+        // ĐĂNG NHẬP (Login)
         [HttpPost("login")]
-        public IActionResult Login([FromBody] User user)
+        public IActionResult Login([FromBody] LoginRequest req)
         {
             var matched = _context.Users
-                .FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
+                .FirstOrDefault(u => u.Username == req.Username && u.Password == req.Password);
 
             if (matched == null)
-                return Unauthorized("Invalid credentials");
+                return Unauthorized("Tài khoản hoặc mật khẩu không đúng!");
 
-            // Trả về user thực tế từ DB, KHÔNG phải object 'user' nhận từ client!
-            return Ok(new { Message = "Đăng nhập thành công", user = matched });
+            // Có thể chỉ trả về một số trường (userId, email...), không nên trả về password
+            return Ok(new
+            {
+                message = "Đăng nhập thành công",
+                user = new
+                {
+                    matched.Id,
+                    matched.Username,
+                    matched.Email,
+                    matched.FullName,
+                    matched.AvatarUrl,
+                    matched.Phone,
+                    matched.Birthdate,
+                    matched.Address
+                }
+            });
         }
-
     }
 }

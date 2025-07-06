@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.cardview:cardview:1.0.0")
 
     // Retrofit + OkHttp + Glide ĐÚNG KOTLIN DSL
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

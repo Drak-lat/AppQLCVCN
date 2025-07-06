@@ -17,18 +17,48 @@ namespace API.CongViec.Controllers
             _context = context;
         }
 
-        // Lấy toàn bộ công việc theo UserId
-        [HttpGet("user/{userId}")]
-        public IActionResult GetByUser(int userId)
+        // Lấy tất cả Task theo PlanId
+        [HttpGet("plan/{planId}")]
+        public IActionResult GetByPlan(int planId)
         {
             var tasks = _context.Tasks
-                .Where(t => t.UserId == userId)
+                .Where(t => t.PlanId == planId)
                 .ToList();
-
             return Ok(tasks);
         }
 
-        // Tạo công việc mới
+        // Lọc Task hoàn thành theo PlanId
+        [HttpGet("plan/{planId}/completed")]
+        public IActionResult GetByCompletion(int planId, [FromQuery] bool status)
+        {
+            var tasks = _context.Tasks
+                .Where(t => t.PlanId == planId && t.Completed == status)
+                .ToList();
+            return Ok(tasks);
+        }
+
+        // Lọc theo Priority theo PlanId
+        [HttpGet("plan/{planId}/priority")]
+        public IActionResult GetByPriority(int planId, [FromQuery] int level)
+        {
+            var tasks = _context.Tasks
+                .Where(t => t.PlanId == planId && t.Priority == level)
+                .ToList();
+            return Ok(tasks);
+        }
+
+        // Search Task theo keyword theo PlanId
+        [HttpGet("plan/{planId}/search")]
+        public IActionResult SearchTasks(int planId, [FromQuery] string keyword)
+        {
+            var tasks = _context.Tasks
+                .Where(t => t.PlanId == planId &&
+                            (t.Title.Contains(keyword) || t.Description.Contains(keyword)))
+                .ToList();
+            return Ok(tasks);
+        }
+
+        // Tạo Task mới
         [HttpPost]
         public IActionResult Create([FromBody] TaskModel task)
         {
@@ -37,7 +67,7 @@ namespace API.CongViec.Controllers
             return Ok(task);
         }
 
-        // Cập nhật công việc theo Id
+        // Cập nhật Task
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] TaskModel updatedTask)
         {
@@ -49,12 +79,13 @@ namespace API.CongViec.Controllers
             task.DueDate = updatedTask.DueDate;
             task.Priority = updatedTask.Priority;
             task.Completed = updatedTask.Completed;
+            task.PlanId = updatedTask.PlanId;
 
             _context.SaveChanges();
             return Ok(task);
         }
 
-        // Xóa công việc
+        // Xóa Task
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -65,37 +96,5 @@ namespace API.CongViec.Controllers
             _context.SaveChanges();
             return Ok("Deleted");
         }
-        // GET: api/tasks/user/1/completed?status=true
-        [HttpGet("user/{userId}/completed")]
-        public IActionResult GetByCompletion(int userId, [FromQuery] bool status)
-        {
-            var tasks = _context.Tasks
-                .Where(t => t.UserId == userId && t.Completed == status)
-                .ToList();
-
-            return Ok(tasks);
-        }
-        // GET: api/tasks/user/1/priority?level=2
-        [HttpGet("user/{userId}/priority")]
-        public IActionResult GetByPriority(int userId, [FromQuery] int level)
-        {
-            var tasks = _context.Tasks
-                .Where(t => t.UserId == userId && t.Priority == level)
-                .ToList();
-
-            return Ok(tasks);
-        }
-        // GET: api/tasks/user/1/search?keyword=báo
-        [HttpGet("user/{userId}/search")]
-        public IActionResult SearchTasks(int userId, [FromQuery] string keyword)
-        {
-            var tasks = _context.Tasks
-                .Where(t => t.UserId == userId &&
-                            (t.Title.Contains(keyword) || t.Description.Contains(keyword)))
-                .ToList();
-
-            return Ok(tasks);
-        }
-
     }
 }

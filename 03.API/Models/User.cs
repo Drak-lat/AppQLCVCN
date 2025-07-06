@@ -3,14 +3,15 @@
 public class User
 {
     public int Id { get; set; }
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public string? FullName { get; set; }
+    public string? Email { get; set; }
+    public string? Phone { get; set; }
+    public DateTime? Birthdate { get; set; }
+    public string? Address { get; set; }
+    public string? AvatarUrl { get; set; }
 
-    // Thông tin mở rộng cho Profile
-    public string? FullName { get; set; } = string.Empty;
-    public string? Email { get; set; } = string.Empty;
-    public string? Phone { get; set; } = string.Empty;
-    public DateTime? Birthdate { get; set; }       // Có thể để null nếu không nhập
-    public string? Address { get; set; } = string.Empty;
-    public string? AvatarUrl { get; set; } = string.Empty;
+    // Fix: Add the missing 'Plans' property to resolve CS1061  
+    public ICollection<Plan>? Plans { get; set; }
 }

@@ -1,23 +1,21 @@
 package com.example.quanlycongviecapp.Remote;
 
 import com.example.quanlycongviecapp.Model.LoginResponse;
+import com.example.quanlycongviecapp.Model.Plan;
 import com.example.quanlycongviecapp.Model.TaskModel;
 import com.example.quanlycongviecapp.Model.User;
-import com.example.quanlycongviecapp.Model.UserProfile;
+import com.example.quanlycongviecapp.Model.Account;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.PUT;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Multipart;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Part;
 
 import java.util.List;
@@ -37,10 +35,10 @@ public interface ApiService {
     Call<List<TaskModel>> getTasksByPriority(@Path("userId") int userId);
 
     @GET("/api/Users/{id}")
-    Call<UserProfile> getUserById(@Path("id") int id);
+    Call<Account> getUserById(@Path("id") int id);
 
     @PUT("/api/Users/{id}")
-    Call<UserProfile> updateProfile(@Path("id") int id, @Body UserProfile userProfile);
+    Call<Account> updateProfile(@Path("id") int id, @Body Account userProfile);
 
     @POST("api/Tasks")
     Call<TaskModel> createTask(@Body TaskModel taskModel);
@@ -48,7 +46,17 @@ public interface ApiService {
     @PUT("api/Tasks/{taskId}")
     Call<TaskModel> updateTask(@Path("taskId") int taskId, @Body TaskModel taskModel);
 
+    @GET("api/Plans/user/{userId}")
+    Call<List<Plan>> getPlansByUser(@Path("userId") int userId);
 
+    @POST("api/Plans")
+    Call<Plan> createPlan(@Body Plan plan);
+
+    @PUT("api/Plans/{id}")
+    Call<Plan> updatePlan(@Path("id") int id, @Body Plan plan);
+
+    @DELETE("api/Plans/{id}")
+    Call<Void> deletePlan(@Path("id") int id);
 
     @Multipart
     @POST("Users/upload-avatar/{id}")

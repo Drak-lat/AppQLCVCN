@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edtPlanName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tên kế hoạch"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtPlanDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mô tả"
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:minLines="3"
+            android:maxLines="5"
+            android:gravity="top"
+            android:layout_marginTop="8dp" />
+
+        <!-- Thêm 2 EditText để nhập StartDate và EndDate -->
+
+        <EditText
+            android:id="@+id/edtStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ngày bắt đầu (yyyy-MM-dd)"
+            android:inputType="date"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/edtEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ngày kết thúc (yyyy-MM-dd)"
+            android:inputType="date"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnSavePlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lưu kế hoạch"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

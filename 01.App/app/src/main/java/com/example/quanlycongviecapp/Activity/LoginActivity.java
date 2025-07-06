@@ -36,33 +36,43 @@ public class LoginActivity extends AppCompatActivity {
         tvRegister = findViewById(R.id.tvRegister);
 
         // Sự kiện chuyển sang RegisterActivity
-        tvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
+        tvRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
         });
 
         btnLogin.setOnClickListener(v -> {
             String username = edtUsername.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
-            User user = new User(username, password);
 
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Nhập đủ tài khoản và mật khẩu!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            User user = new User(username, password);
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-// Đổi từ Call<User> sang Call<LoginResponse>
+
             Call<LoginResponse> call = apiService.login(user);
             call.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        User user = response.body().getUser(); // Lấy user thực tế từ response
+                        User user = response.body().getUser();
                         int userId = user.getId();
 
+                        // Lưu userId vào SharedPreferences (nếu cần)
+                        getSharedPreferences("user_prefs", MODE_PRIVATE)
+                                .edit()
+                                .putInt("userId", userId)
+                                .apply();
+
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this, MainMenu.class);
+                        Intent intent = new Intent(LoginActivity.this, Menu.class);
                         intent.putExtra("userId", userId);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                         finish();
                     } else {
                         try {
@@ -80,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
         });
     }
 }

@@ -48,5 +48,7 @@
     <color name="priority_medium_color">#FFEB3B</color>
     <color name="priority_low_color">#81C784</color>
     <color name="priority_none_color">#9E9E9E</color>
+    <color name="colorAccent">#7C3AED</color> <!-- tím hiện đại -->
+    <color name="text_secondary">#A0A4B8</color>
 
 </resources>
