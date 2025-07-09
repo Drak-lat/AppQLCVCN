@@ -2,7 +2,7 @@
 using API.CongViec.Data;
 using API.CongViec.Models;
 using Microsoft.EntityFrameworkCore;
-using API.CongViec.Model;
+//using API.CongViec.Model;
 
 namespace API.CongViec.Controllers
 {

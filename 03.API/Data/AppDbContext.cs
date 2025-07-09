@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using API.CongViec.Models;
-using API.CongViec.Model;
+//using API.CongViec.Model;
 using System.Numerics;
 
 namespace API.CongViec.Data
@@ -22,15 +22,15 @@ namespace API.CongViec.Data
             modelBuilder.Entity<TaskModel>().ToTable("Tasks");
 
             // RÀNG BUỘC QUAN HỆ
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Plans)
-                .WithOne(p => p.User)
-                .HasForeignKey(p => p.UserId);
+            //modelBuilder.Entity<User>()
+            //    .HasMany(u => u.Plans)
+            //    .WithOne(p => p.User)
+            //    .HasForeignKey(p => p.UserId);
 
-            modelBuilder.Entity<Plan>()
-                .HasMany(p => p.Tasks)
-                .WithOne(t => t.Plan)
-                .HasForeignKey(t => t.PlanId);
+            //modelBuilder.Entity<Plan>()
+            //    .HasMany(p => p.Tasks)
+            //    .WithOne(t => t.Plan)
+            //    .HasForeignKey(t => t.PlanId);
         }
     }
 }

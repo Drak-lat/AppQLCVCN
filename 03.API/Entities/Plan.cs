@@ -1,5 +1,6 @@
-﻿
-namespace API.CongViec.Models
+﻿//using API.CongViec.Model;
+
+namespace API.CongViec.Entities
 {
     public class Plan
     {
@@ -9,8 +10,7 @@ namespace API.CongViec.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int UserId { get; set; }
-
-        // Add this property to fix the error  
-        public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
+        public User User { get; set; }
+        public ICollection<TaskModel> Tasks { get; set; }
     }
 }
