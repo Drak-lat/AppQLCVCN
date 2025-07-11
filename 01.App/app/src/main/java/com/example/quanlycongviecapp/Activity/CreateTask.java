@@ -1,144 +1,155 @@
 package com.example.quanlycongviecapp.Activity;
 
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quanlycongviecapp.Model.TaskModel;
 import com.example.quanlycongviecapp.R;
 import com.example.quanlycongviecapp.Remote.ApiService;
 import com.example.quanlycongviecapp.Remote.RetrofitClient;
+import com.google.gson.Gson;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+public class CreateTask extends AppCompatActivity {
+    private EditText edtTitle, edtDesc, edtDueDate;
+    private Spinner spPriority;
+    private CheckBox cbCompleted;
+    private Button btnSave, btnCancel;
+    private int planId;
 
-public class AddTask extends DialogFragment {
+    // Định dạng SQL Server: yyyy-MM-dd
+    private static final String SQL_DATE_PATTERN = "yyyy-MM-dd";
 
-    private EditText edtTaskTitle, edtTaskDesc, edtDueDate;
-    private Button btnSaveTask;
-
-    private TaskModel taskToEdit;
-    private OnTaskSavedListener listener;
-
-    public interface OnTaskSavedListener {
-        void onTaskSaved();
-    }
-
-    public void setTaskToEdit(TaskModel task) {
-        this.taskToEdit = task;
-    }
-
-    public void setOnTaskSavedListener(OnTaskSavedListener listener) {
-        this.listener = listener;
-    }
-
-    public static AddTask newInstance(TaskModel task) {
-        AddTask dialog = new AddTask();
-        dialog.setTaskToEdit(task);
-        return dialog;
-    }
-
-    public static void show(androidx.fragment.app.FragmentActivity activity, OnTaskSavedListener listener, TaskModel task) {
-        AddTask dialog = newInstance(task);
-        dialog.setOnTaskSavedListener(listener);
-        dialog.show(activity.getSupportFragmentManager(), "AddTask");
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.add_task, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
 
-        edtTaskTitle = view.findViewById(R.id.edtTaskTitle);
-        edtTaskDesc = view.findViewById(R.id.edtTaskDesc);
-        edtDueDate = view.findViewById(R.id.edtDueDate);
-        btnSaveTask = view.findViewById(R.id.btnSaveTask);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_task_form);
 
-        if (taskToEdit != null) {
-            edtTaskTitle.setText(taskToEdit.getTitle());
-            edtTaskDesc.setText(taskToEdit.getDescription());
-            edtDueDate.setText(taskToEdit.getDueDate());
+        // Ánh xạ
+        edtTitle   = findViewById(R.id.Title);
+        edtDesc    = findViewById(R.id.Description);
+        edtDueDate = findViewById(R.id.DueDate);
+        spPriority = findViewById(R.id.Priority);
+        cbCompleted= findViewById(R.id.Completed);
+        btnSave    = findViewById(R.id.Save);
+        btnCancel  = findViewById(R.id.Cancel);
+
+        // Lấy planId từ Intent
+        planId = getIntent().getIntExtra("planId", -1);
+
+        // Thiết lập Spinner ưu tiên
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.priorities,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPriority.setAdapter(adapter);
+
+        // Cho hint định dạng
+        edtDueDate.setHint(SQL_DATE_PATTERN);
+
+        // Nút Lưu và Hủy
+        btnSave.setOnClickListener(v -> doAddTask());
+        btnCancel.setOnClickListener(v -> finish());
+        boolean isEdit = getIntent().getBooleanExtra("isEdit", false);
+        if (isEdit) {
+            String json = getIntent().getStringExtra("taskJson");
+            TaskModel editing = new Gson().fromJson(json, TaskModel.class);
+            // Prefill form:
+            edtTitle.setText(editing.getTitle());
+            edtDesc.setText(editing.getDescription());
+            edtDueDate.setText(editing.getDueDate().split("T")[0]);
+            spPriority.setSelection(editing.getPriority() - 1);
+            cbCompleted.setChecked(editing.isCompleted());
+            planId = editing.getPlanId();
+            // Đổi nút Save thành Cập nhật
+            btnSave.setText("Cập nhật");
         }
 
-        btnSaveTask.setOnClickListener(v -> {
-            String title = edtTaskTitle.getText().toString().trim();
-            String desc = edtTaskDesc.getText().toString().trim();
-            String dueDate = edtDueDate.getText().toString().trim();
+    }
 
-            if (TextUtils.isEmpty(title)) {
-                Toast.makeText(getContext(), "Vui lòng nhập tiêu đề công việc", Toast.LENGTH_SHORT).show();
-                return;
+    private void doAddTask() {
+        String title = edtTitle.getText().toString().trim();
+        String desc  = edtDesc.getText().toString().trim();
+        String dueDateInput = edtDueDate.getText().toString().trim();
+        int priority    = spPriority.getSelectedItemPosition() + 1;
+        boolean completed = cbCompleted.isChecked();
+
+
+
+
+        // Validate title
+        if (title.isEmpty()) {
+            edtTitle.setError("Nhập tiêu đề");
+            return;
+        }
+        // Validate date format
+        if (!isValidSqlDate(dueDateInput)) {
+            edtDueDate.setError("Nhập ngày theo định dạng yyyy-MM-dd");
+            Toast.makeText(this, "Ngày không hợp lệ, vui lòng nhập lại theo định dạng yyyy-MM-dd", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Chuyển sang định dạng ISO cho backend
+        String isoDate = dueDateInput + "T00:00:00.000Z";
+
+        // Tạo TaskModel bằng setter
+        TaskModel taskModel = new TaskModel();
+        taskModel.setTitle(title);
+        taskModel.setDescription(desc);
+        taskModel.setDueDate(isoDate);
+        taskModel.setPriority(priority);
+        taskModel.setCompleted(completed);
+        taskModel.setPlanId(planId);
+
+        // Debug payload
+        Log.d("CreateTask", "Payload: " + new Gson().toJson(taskModel));
+
+        ApiService api = RetrofitClient.getClient().create(ApiService.class);
+        api.createTask(taskModel).enqueue(new Callback<TaskModel>() {
+            @Override
+            public void onResponse(Call<TaskModel> call, Response<TaskModel> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(CreateTask.this, "Đã thêm thành công!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(CreateTask.this, "Lỗi server: " + response.code(), Toast.LENGTH_LONG).show();
+                }
             }
-            if (TextUtils.isEmpty(dueDate)) {
-                Toast.makeText(getContext(), "Vui lòng nhập ngày hết hạn", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
-            ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-
-            if (taskToEdit == null) {
-                TaskModel newTask = new TaskModel();
-                newTask.setTitle(title);
-                newTask.setDescription(desc);
-                newTask.setDueDate(dueDate);
-                // TODO: set PlanId hoặc UserId nếu cần
-
-                Call<TaskModel> call = apiService.createTask(newTask);
-                call.enqueue(new Callback<TaskModel>() {
-                    @Override
-                    public void onResponse(Call<TaskModel> call, Response<TaskModel> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(getContext(), "Thêm công việc thành công", Toast.LENGTH_SHORT).show();
-                            if (listener != null) listener.onTaskSaved();
-                            dismiss();
-                        } else {
-                            Toast.makeText(getContext(), "Thêm công việc thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<TaskModel> call, Throwable t) {
-                        Toast.makeText(getContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                taskToEdit.setTitle(title);
-                taskToEdit.setDescription(desc);
-                taskToEdit.setDueDate(dueDate);
-
-                Call<TaskModel> call = apiService.updateTask(taskToEdit.getId(), taskToEdit);
-                call.enqueue(new Callback<TaskModel>() {
-                    @Override
-                    public void onResponse(Call<TaskModel> call, Response<TaskModel> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(getContext(), "Cập nhật công việc thành công", Toast.LENGTH_SHORT).show();
-                            if (listener != null) listener.onTaskSaved();
-                            dismiss();
-                        } else {
-                            Toast.makeText(getContext(), "Cập nhật công việc thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<TaskModel> call, Throwable t) {
-                        Toast.makeText(getContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onFailure(Call<TaskModel> call, Throwable t) {
+                Toast.makeText(CreateTask.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
 
-        return view;
+    private boolean isValidSqlDate(String dateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat(SQL_DATE_PATTERN, Locale.getDefault());
+        sdf.setLenient(false);
+        try {
+            sdf.parse(dateStr);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }

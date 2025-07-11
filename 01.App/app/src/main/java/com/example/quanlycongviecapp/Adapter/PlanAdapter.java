@@ -7,7 +7,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
+import android.content.Intent;
 
+
+import com.example.quanlycongviecapp.Activity.TaskFragment;
 import com.example.quanlycongviecapp.Model.Plan;  // <-- phải import đúng
 import com.example.quanlycongviecapp.R;
 
@@ -45,6 +49,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
         holder.tvPlanDates.setText(plan.getStartDate() + " - " + plan.getEndDate());
 
         holder.itemView.setOnClickListener(v -> listener.onPlanClick(plan));
+
     }
 
     @Override

@@ -52,7 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:drawableEnd="@drawable/calendar"
         android:hint="Chọn ngày"
         android:inputType="date"
         android:padding="8dp" />

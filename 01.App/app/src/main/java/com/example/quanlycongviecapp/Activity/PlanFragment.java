@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quanlycongviecapp.Adapter.PlanAdapter;
+import com.example.quanlycongviecapp.Activity.TaskFragment;
 import com.example.quanlycongviecapp.Model.Plan;
 import com.example.quanlycongviecapp.R;
 import com.example.quanlycongviecapp.Remote.ApiService;
@@ -27,28 +28,21 @@ import retrofit2.Response;
 
 public class PlanFragment extends Fragment {
 
-    RecyclerView rvPlans;
-    PlanAdapter adapter;
-    List<Plan> planList = new ArrayList<>();
-
-    // Giả sử userId được truyền từ Activity hoặc lấy từ SharedPreferences
+    private RecyclerView rvPlans;
+    private List<Plan> planList = new ArrayList<>();
     private int userId = -1;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.plan, container, false);
 
         rvPlans = view.findViewById(R.id.rvPlans);
-        rvPlans.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PlanAdapter(planList, plan -> {
-            Toast.makeText(getContext(), "Click kế hoạch: " + plan.getName(), Toast.LENGTH_SHORT).show();
-            // TODO: Chuyển sang TaskFragment hoặc Activity chi tiết plan
-        });
-        rvPlans.setAdapter(adapter);
+        rvPlans.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Lấy userId từ activity cha (nếu MainActivity chứa fragment)
+        // Lấy userId từ Activity chứa Fragment
         if (getActivity() instanceof Menu) {
             userId = ((Menu) getActivity()).getUserId();
         }
@@ -65,23 +59,43 @@ public class PlanFragment extends Fragment {
         }
 
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Call<List<Plan>> call = apiService.getPlansByUser(userId);
-        call.enqueue(new Callback<List<Plan>>() {
+        apiService.getPlansByUser(userId).enqueue(new Callback<List<Plan>>() {
             @Override
-            public void onResponse(Call<List<Plan>> call, Response<List<Plan>> response) {
+            public void onResponse(Call<List<Plan>> call,
+                                   Response<List<Plan>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     planList.clear();
                     planList.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+                    setupAdapter();  // Khởi tạo adapter sau khi có data
                 } else {
-                    Toast.makeText(getContext(), "Lấy danh sách kế hoạch thất bại", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),
+                            "Lấy danh sách kế hoạch thất bại",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Plan>> call, Throwable t) {
-                Toast.makeText(getContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),
+                        "Lỗi: " + t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void setupAdapter() {
+        PlanAdapter adapter = new PlanAdapter(planList, plan -> {
+            // khi click 1 plan, replace TaskFragment
+            TaskFragment frag = TaskFragment.newInstance(plan.getId());
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, frag)
+                    .addToBackStack(null)
+                    .commit();
+            if (getActivity() instanceof Menu) {
+                ((Menu) getActivity()).openTaskTab(plan.getId());
+            }
+        });
+        rvPlans.setAdapter(adapter);
     }
 }
