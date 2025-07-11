@@ -16,22 +16,37 @@
             android:id="@+id/imgAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/nen"
+            android:src="@drawable/avatar_default"
             android:scaleType="centerCrop"
             android:layout_gravity="center"
             android:background="@drawable/nen1"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="8dp"/>
-
-        <Button
-            android:id="@+id/btnChangeAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đổi ảnh đại diện"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/purple_700"
-            android:textColor="@color/white"
             android:layout_marginBottom="16dp"/>
+
+        <!-- Username (readonly) -->
+        <EditText
+            android:id="@+id/edtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Tên đăng nhập"
+            android:background="@drawable/bg_input"
+            android:layout_marginBottom="12dp"
+            android:enabled="false"
+            android:focusable="false"
+            android:textColorHint="#777" />
+
+        <!-- Password (readonly/hidden) -->
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Mật khẩu"
+            android:background="@drawable/bg_input"
+            android:layout_marginBottom="12dp"
+            android:enabled="false"
+            android:focusable="false"
+            android:inputType="textPassword"
+            android:textColorHint="#777" />
 
         <!-- Họ tên -->
         <EditText
@@ -67,7 +82,7 @@
             android:id="@+id/edtBirthdate"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="Ngày sinh (dd/MM/yyyy)"
+            android:hint="Ngày sinh (yyyy-MM-dd)"
             android:inputType="date"
             android:background="@drawable/bg_input"
             android:layout_marginBottom="12dp"/>

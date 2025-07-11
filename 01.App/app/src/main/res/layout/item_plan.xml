@@ -16,16 +16,44 @@
         android:layout_height="wrap_content">
 
         <!-- Tên kế hoạch -->
-        <TextView
-            android:id="@+id/tvPlanName"
+        <!-- Dòng này thay cho TextView tvPlanName -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tên kế hoạch"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#2E3A59"
-            android:maxLines="2"
-            android:ellipsize="end" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvPlanName"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Tên kế hoạch"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#2E3A59"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <ImageView
+                android:id="@+id/imgEdit"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_priority"
+                android:padding="4dp"
+                android:contentDescription="Sửa kế hoạch"
+                android:layout_marginStart="6dp" />
+
+            <ImageView
+                android:id="@+id/imgDelete"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_task"
+                android:padding="4dp"
+                android:contentDescription="Xóa kế hoạch"
+                android:layout_marginStart="4dp" />
+        </LinearLayout>
+
 
         <!-- Mô tả kế hoạch -->
         <TextView

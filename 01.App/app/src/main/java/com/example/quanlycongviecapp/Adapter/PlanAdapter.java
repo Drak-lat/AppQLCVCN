@@ -3,16 +3,16 @@ package com.example.quanlycongviecapp.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.quanlycongviecapp.Model.Plan;  // <-- phải import đúng
+import com.example.quanlycongviecapp.Model.Plan;
 import com.example.quanlycongviecapp.R;
 
 import java.util.List;
-
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder> {
 
@@ -21,6 +21,8 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
 
     public interface OnPlanClickListener {
         void onPlanClick(Plan plan);
+        void onEdit(Plan plan);
+        void onDelete(Plan plan);
     }
 
     public PlanAdapter(List<Plan> planList, OnPlanClickListener listener) {
@@ -41,10 +43,17 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
         Plan plan = planList.get(position);
         holder.tvPlanName.setText(plan.getName());
         holder.tvPlanDesc.setText(plan.getDescription());
-        // Format ngày tháng, ví dụ đơn giản:
         holder.tvPlanDates.setText(plan.getStartDate() + " - " + plan.getEndDate());
 
-        holder.itemView.setOnClickListener(v -> listener.onPlanClick(plan));
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onPlanClick(plan);
+        });
+        holder.imgEdit.setOnClickListener(v -> {
+            if (listener != null) listener.onEdit(plan);
+        });
+        holder.imgDelete.setOnClickListener(v -> {
+            if (listener != null) listener.onDelete(plan);
+        });
     }
 
     @Override
@@ -52,14 +61,17 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
         return planList.size();
     }
 
-    static class PlanViewHolder extends RecyclerView.ViewHolder {
+    public static class PlanViewHolder extends RecyclerView.ViewHolder {
         TextView tvPlanName, tvPlanDesc, tvPlanDates;
+        ImageView imgEdit, imgDelete;
 
         public PlanViewHolder(@NonNull View itemView) {
             super(itemView);
             tvPlanName = itemView.findViewById(R.id.tvPlanName);
             tvPlanDesc = itemView.findViewById(R.id.tvPlanDesc);
             tvPlanDates = itemView.findViewById(R.id.tvPlanDates);
+            imgEdit = itemView.findViewById(R.id.imgEdit);
+            imgDelete = itemView.findViewById(R.id.imgDelete);
         }
     }
 }

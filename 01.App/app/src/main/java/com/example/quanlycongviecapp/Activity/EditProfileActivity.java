@@ -1,8 +1,5 @@
 package com.example.quanlycongviecapp.Activity;
 
-import android.content.Intent;
-
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,24 +13,19 @@ import com.example.quanlycongviecapp.R;
 import com.example.quanlycongviecapp.Remote.ApiService;
 import com.example.quanlycongviecapp.Remote.RetrofitClient;
 
-import java.io.File;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class EditProfileActivity extends AppCompatActivity {
     private ImageView imgAvatar;
-    private EditText edtFullName, edtEmail, edtPhone, edtBirthdate, edtAddress;
-    private Button btnSaveProfile, btnChangeAvatar;
+    private EditText edtUsername, edtPassword, edtFullName, edtEmail, edtPhone, edtBirthdate, edtAddress;
+    private Button btnSaveProfile;
     private int userId;
     private Account currentUser;
-    private static final int REQUEST_CODE_PICK_IMAGE = 1001;
-    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +33,14 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.editprofile);
 
         imgAvatar = findViewById(R.id.imgAvatar);
+        edtUsername = findViewById(R.id.edtUsername);
+        edtPassword = findViewById(R.id.edtPassword);
         edtFullName = findViewById(R.id.edtFullName);
         edtEmail = findViewById(R.id.edtEmail);
         edtPhone = findViewById(R.id.edtPhone);
         edtBirthdate = findViewById(R.id.edtBirthdate);
         edtAddress = findViewById(R.id.edtAddress);
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
-        btnChangeAvatar = findViewById(R.id.btnChangeAvatar);
 
         userId = getIntent().getIntExtra("userId", -1);
         if (userId == -1) {
@@ -65,22 +58,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
             updateProfile();
         });
-
-        btnChangeAvatar.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
-            overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.getData();
-            imgAvatar.setImageURI(selectedImageUri); // Xem trước ảnh mới
-            uploadAvatarToServer();
-        }
     }
 
     private void loadUserInfo(int id) {
@@ -90,6 +67,9 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onResponse(Call<Account> call, Response<Account> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     currentUser = response.body();
+
+                    edtUsername.setText(currentUser.getUsername());
+                    edtPassword.setText(currentUser.getPassword()); // Có thể hiển thị ****** nếu muốn
                     edtFullName.setText(currentUser.getFullName());
                     edtEmail.setText(currentUser.getEmail());
                     edtPhone.setText(currentUser.getPhone());
@@ -102,7 +82,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 .placeholder(R.drawable.avatar_default)
                                 .into(imgAvatar);
                     } else {
-                        imgAvatar.setImageDrawable(null);
+                        imgAvatar.setImageResource(R.drawable.avatar_default);
                     }
                 } else {
                     Toast.makeText(EditProfileActivity.this, "Không tìm thấy thông tin user!", Toast.LENGTH_SHORT).show();
@@ -119,11 +99,17 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void updateProfile() {
-        currentUser.setFullName(edtFullName.getText().toString());
-        currentUser.setEmail(edtEmail.getText().toString());
-        currentUser.setPhone(edtPhone.getText().toString());
-        currentUser.setBirthdate(edtBirthdate.getText().toString());
-        currentUser.setAddress(edtAddress.getText().toString());
+        // Lấy lại toàn bộ thông tin (username và password lấy lại từ EditText, readonly nhưng vẫn gửi)
+        currentUser.setUsername(edtUsername.getText().toString());
+        currentUser.setPassword(edtPassword.getText().toString());
+        currentUser.setFullName(edtFullName.getText().toString().trim());
+        currentUser.setEmail(edtEmail.getText().toString().trim());
+        currentUser.setPhone(edtPhone.getText().toString().trim());
+
+        String inputBirthdate = edtBirthdate.getText().toString().trim();
+        currentUser.setBirthdate(toIsoDate(inputBirthdate));
+
+        currentUser.setAddress(edtAddress.getText().toString().trim());
 
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
         Call<Account> call = apiService.updateProfile(userId, currentUser);
@@ -134,7 +120,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     Toast.makeText(EditProfileActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(EditProfileActivity.this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
+                    try {
+                        String error = response.errorBody() != null ? response.errorBody().string() : "Unknown error";
+                        Toast.makeText(EditProfileActivity.this, "Cập nhật thất bại: " + error, Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(EditProfileActivity.this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -145,38 +136,16 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void uploadAvatarToServer() {
-        if (selectedImageUri == null) {
-            Toast.makeText(this, "Bạn chưa chọn ảnh mới!", Toast.LENGTH_SHORT).show();
-            return;
+    // Hàm convert ngày dd/MM/yyyy -> yyyy-MM-dd
+    private String toIsoDate(String inputDate) {
+        try {
+            SimpleDateFormat fromFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = fromFormat.parse(inputDate);
+            return toFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return inputDate;
         }
-
-        String realPath = RealPathUtil.getRealPath(this, selectedImageUri);
-        if (realPath == null) {
-            Toast.makeText(this, "Không lấy được đường dẫn ảnh!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        File file = new File(realPath);
-
-        MediaType mediaType = MediaType.parse(getContentResolver().getType(selectedImageUri));
-        RequestBody requestFile = RequestBody.create(mediaType, file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        apiService.uploadAvatar(userId, body).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(EditProfileActivity.this, "Đổi ảnh đại diện thành công!", Toast.LENGTH_SHORT).show();
-                    // (Có thể load lại avatar từ server nếu muốn)
-                } else {
-                    Toast.makeText(EditProfileActivity.this, "Đổi ảnh đại diện thất bại!", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(EditProfileActivity.this, "Lỗi upload ảnh: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

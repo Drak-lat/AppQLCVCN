@@ -2,6 +2,7 @@ package com.example.quanlycongviecapp.Activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.content.Intent;
 
 import com.example.quanlycongviecapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -69,18 +70,13 @@ public class Menu extends AppCompatActivity {
         fabAdd.setOnClickListener(v -> {
             int selectedItem = bottomNavigationView.getSelectedItemId();
             if (selectedItem == R.id.plan) {
-                // Mở dialog thêm kế hoạch
-                AddPlan.show(this, () -> {
-                    // Reload danh sách plan sau khi thêm
-                    // Ví dụ gọi lại PlanFragment load lại data
-                }, null);
-            } else if (selectedItem == R.id.task) {
-                // Mở dialog thêm công việc
-                AddTask.show(this, () -> {
-                    // Reload danh sách task sau khi thêm
-                }, null);
+                Intent intent = new Intent(Menu.this, AddPlanActivity.class);
+                intent.putExtra("userId", userId); // truyền userId nếu cần
+                startActivityForResult(intent, 123); // hoặc dùng ActivityResultLauncher với API mới
             }
+            // ... task thì code tương tự
         });
+
 
     }
 

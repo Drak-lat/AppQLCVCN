@@ -21,7 +21,7 @@
 
         <!-- Đăng ký -->
         <activity android:name=".Activity.RegisterActivity" android:exported="true" />
-        <activity android:name=".Activity.ProfileActivity" android:exported="true"/>
+
         <activity android:name=".Activity.EditProfileActivity" />
 
         <!-- Đăng nhập - màn hình khởi động -->
@@ -33,6 +33,7 @@
         </activity>
 
         <!-- Các Activity khác nếu có, ví dụ thêm kế hoạch, thêm task -->
+        <activity android:name=".Activity.AddPlanActivity" />
 
         <activity android:name=".Activity.AddPlan" android:exported="true"
             tools:ignore="Instantiatable" />
