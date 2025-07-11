@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.quanlycongviecapp.Model.Plan;
 import com.example.quanlycongviecapp.R;
@@ -29,28 +30,40 @@ public class AddPlan extends DialogFragment {
 
     private Plan planToEdit;
     private OnPlanSavedListener listener;
+    private int userId = -1; // Dùng để truyền vào khi tạo Plan mới
 
+    // Interface callback
     public interface OnPlanSavedListener {
         void onPlanSaved();
     }
 
+    // Setter cho plan đang chỉnh sửa (nếu có)
     public void setPlanToEdit(Plan plan) {
         this.planToEdit = plan;
     }
 
+    // Setter cho listener callback
     public void setOnPlanSavedListener(OnPlanSavedListener listener) {
         this.listener = listener;
     }
 
+    // Setter cho userId
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    // Factory method để tạo DialogFragment
     public static AddPlan newInstance(Plan plan) {
         AddPlan dialog = new AddPlan();
         dialog.setPlanToEdit(plan);
         return dialog;
     }
 
-    public static void show(androidx.fragment.app.FragmentActivity activity, OnPlanSavedListener listener, Plan plan) {
+    // Static method để show dialog
+    public static void show(FragmentActivity activity, OnPlanSavedListener listener, Plan plan, int userId) {
         AddPlan dialog = newInstance(plan);
         dialog.setOnPlanSavedListener(listener);
+        dialog.setUserId(userId);
         dialog.show(activity.getSupportFragmentManager(), "AddPlan");
     }
 
@@ -66,6 +79,7 @@ public class AddPlan extends DialogFragment {
         edtEndDate = view.findViewById(R.id.edtEndDate);
         btnSavePlan = view.findViewById(R.id.btnSavePlan);
 
+        // Nếu là edit
         if (planToEdit != null) {
             edtPlanName.setText(planToEdit.getName());
             edtPlanDesc.setText(planToEdit.getDescription());
@@ -95,12 +109,13 @@ public class AddPlan extends DialogFragment {
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
             if (planToEdit == null) {
+                // Thêm mới
                 Plan newPlan = new Plan();
                 newPlan.setName(name);
                 newPlan.setDescription(desc);
                 newPlan.setStartDate(startDate);
                 newPlan.setEndDate(endDate);
-                // TODO: set UserId nếu cần
+                newPlan.setUserId(userId); // Truyền userId
 
                 Call<Plan> call = apiService.createPlan(newPlan);
                 call.enqueue(new Callback<Plan>() {
@@ -121,6 +136,7 @@ public class AddPlan extends DialogFragment {
                     }
                 });
             } else {
+                // Sửa
                 planToEdit.setName(name);
                 planToEdit.setDescription(desc);
                 planToEdit.setStartDate(startDate);

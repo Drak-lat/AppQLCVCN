@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.example.quanlycongviecapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -73,8 +74,10 @@ public class Menu extends AppCompatActivity {
             int selectedItem = bottomNavigationView.getSelectedItemId();
             if (selectedItem == R.id.plan) {
                 // Mở dialog thêm kế hoạch
-                AddPlan.show(this, () -> {
-                    // Reload danh sách plan sau khi thêm
+                Intent intent = new Intent(Menu.this, AddPlanActivity.class);
+                intent.putExtra("userId", userId); // truyền userId nếu cần
+                startActivityForResult(intent, 123); // hoặc dùng ActivityResultLauncher với API mới
+            }
                 }, null);
 
             } else if (selectedItem == R.id.task) {
@@ -86,8 +89,10 @@ public class Menu extends AppCompatActivity {
                 intent.putExtra("planId", currentPlanId);
                 intent.putExtra("userId", userId);
                 startActivity(intent);
-            }
+                
+            // ... task thì code tương tự
         });
+
 
     }
 

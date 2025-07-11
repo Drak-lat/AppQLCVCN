@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
 
     <LinearLayout
-        android:padding="16dp"
+        android:padding="20dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -12,45 +12,46 @@
         <EditText
             android:id="@+id/edtPlanName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="Tên kế hoạch"
-            android:inputType="text" />
+            android:background="@drawable/bg_input"
+            android:inputType="text"
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:id="@+id/edtPlanDesc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:hint="Mô tả"
+            android:background="@drawable/bg_input"
             android:inputType="textMultiLine"
-            android:lines="3"
-            android:minLines="3"
-            android:maxLines="5"
             android:gravity="top"
-            android:layout_marginTop="8dp" />
-
-        <!-- Thêm 2 EditText để nhập StartDate và EndDate -->
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:id="@+id/edtStartDate"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="Ngày bắt đầu (yyyy-MM-dd)"
+            android:background="@drawable/bg_input"
             android:inputType="date"
-            android:layout_marginTop="8dp" />
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:id="@+id/edtEndDate"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="Ngày kết thúc (yyyy-MM-dd)"
+            android:background="@drawable/bg_input"
             android:inputType="date"
-            android:layout_marginTop="8dp" />
+            android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/btnSavePlan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Lưu kế hoạch"
-            android:layout_marginTop="16dp" />
+            android:backgroundTint="@color/purple_700"
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 </ScrollView>

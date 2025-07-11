@@ -12,15 +12,23 @@
         android:gravity="center_horizontal"
         android:padding="24dp">
 
-        <!-- Avatar động -->
-        <ImageView
-            android:id="@+id/imgAvatar"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/avatar_default"
-            android:layout_marginTop="24dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/cart"/>
+        <!-- Avatar với viền gradient -->
+        <FrameLayout
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginTop="24dp">
+
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/avatar_default"
+                android:background="@drawable/bg_avatar_border"
+                android:elevation="6dp"
+                />
+
+        </FrameLayout>
 
         <!-- Họ tên -->
         <TextView
@@ -28,10 +36,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tên người dùng"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="18dp"
+            android:fontFamily="sans-serif-medium"/>
 
         <!-- Email -->
         <TextView
@@ -41,18 +50,18 @@
             android:text="example@email.com"
             android:textSize="15sp"
             android:textColor="#FFFFFF"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="2dp"
+            android:fontFamily="sans-serif"/>
 
-        <!-- CardView thông tin -->
+        <!-- CardView thông tin cá nhân -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
-            card_view:cardElevation="6dp"
-            card_view:cardCornerRadius="16dp"
+            card_view:cardElevation="8dp"
+            card_view:cardCornerRadius="22dp"
             card_view:cardUseCompatPadding="true"
-            android:backgroundTint="#FFF">
+            android:backgroundTint="#FFFFFF">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -65,20 +74,23 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp">
+                    android:paddingBottom="10dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/phone"
-                        android:layout_marginRight="16dp"/>
+                        android:layout_marginRight="16dp"
+                        card_view:tint="#FF9800" />
                     <TextView
                         android:id="@+id/tvPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Số điện thoại"
                         android:textSize="17sp"
-                        android:textColor="#333"/>
+                        android:textColor="#333"
+                        android:fontFamily="sans-serif-medium"/>
                 </LinearLayout>
 
                 <!-- Ngày sinh -->
@@ -86,12 +98,14 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp">
+                    android:paddingBottom="10dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/briday"
+                        card_view:tint="#29B6F6"
                         android:layout_marginRight="16dp"/>
                     <TextView
                         android:id="@+id/tvBirthday"
@@ -99,19 +113,22 @@
                         android:layout_height="wrap_content"
                         android:text="Ngày sinh"
                         android:textSize="17sp"
-                        android:textColor="#333"/>
+                        android:textColor="#333"
+                        android:fontFamily="sans-serif-medium"/>
                 </LinearLayout>
 
                 <!-- Địa chỉ -->
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/address"
+                        card_view:tint="#43A047"
                         android:layout_marginRight="16dp"/>
                     <TextView
                         android:id="@+id/tvAddress"
@@ -119,9 +136,9 @@
                         android:layout_height="wrap_content"
                         android:text="Địa chỉ"
                         android:textSize="17sp"
-                        android:textColor="#333"/>
+                        android:textColor="#333"
+                        android:fontFamily="sans-serif-medium"/>
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -130,12 +147,12 @@
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:text="Chỉnh sửa hồ sơ"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"
+            android:textColor="#fff"
             android:textSize="17sp"
             android:fontFamily="sans-serif-medium"
-            android:background="@drawable/bg_btn_gradient" />
+            android:background="@drawable/bg_btn_gradient"/>
     </LinearLayout>
 </ScrollView>

@@ -40,7 +40,7 @@ public interface ApiService {
     Call<Account> getUserById(@Path("id") int id);
 
     @PUT("/api/Users/{id}")
-    Call<Account> updateProfile(@Path("id") int id, @Body Account userProfile);
+    Call<Account> updateProfile(@Path("id") int id, @Body Account account);
 
     @POST("api/Tasks")
     Call<TaskModel> createTask(@Body TaskModel taskModel);
