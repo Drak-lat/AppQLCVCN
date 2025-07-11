@@ -1,7 +1,9 @@
 package com.example.quanlycongviecapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import android.content.Intent;
 
 import com.example.quanlycongviecapp.R;
@@ -19,6 +21,8 @@ public class Menu extends AppCompatActivity {
 
     // Khai báo biến userId để dùng toàn class
     private int userId = -1;
+    private int currentPlanId = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +50,6 @@ public class Menu extends AppCompatActivity {
             int id = item.getItemId();
             Fragment selected = null;
 
-            // Chú ý: id phải trùng với menu_bottom_nav.xml
             if (id == R.id.home) {
                 selected = new HomeFragment();
                 fabAdd.show();
@@ -70,10 +73,23 @@ public class Menu extends AppCompatActivity {
         fabAdd.setOnClickListener(v -> {
             int selectedItem = bottomNavigationView.getSelectedItemId();
             if (selectedItem == R.id.plan) {
+                // Mở dialog thêm kế hoạch
                 Intent intent = new Intent(Menu.this, AddPlanActivity.class);
                 intent.putExtra("userId", userId); // truyền userId nếu cần
                 startActivityForResult(intent, 123); // hoặc dùng ActivityResultLauncher với API mới
             }
+                }, null);
+
+            } else if (selectedItem == R.id.task) {
+                if (currentPlanId < 0) {
+                    Toast.makeText(this, "Chưa chọn kế hoạch để thêm công việc", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(this, CreateTask.class);
+                intent.putExtra("planId", currentPlanId);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+                
             // ... task thì code tương tự
         });
 
@@ -89,5 +105,16 @@ public class Menu extends AppCompatActivity {
     // Có thể tạo getter cho userId nếu các fragment cần dùng:
     public int getUserId() {
         return userId;
+    }
+    public void openTaskTab(int planId) {
+        currentPlanId = planId;
+        bottomNavigationView.setSelectedItemId(R.id.task);
+
+        TaskFragment frag = TaskFragment.newInstance(planId);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, frag)
+                .addToBackStack(null)
+                .commit();
     }
 }
