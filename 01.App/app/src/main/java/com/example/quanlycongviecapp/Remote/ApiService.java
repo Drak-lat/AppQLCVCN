@@ -28,6 +28,8 @@ public interface ApiService {
     @POST("/api/Auth/Login")
     Call<LoginResponse> login(@Body User user);
 
+    @GET("api/Tasks/plan/{planId}")
+    Call<List<TaskModel>> getTasksByPlan(@Path("planId") int planId);
     @GET("api/Tasks/user/{userId}")
     Call<List<TaskModel>> getTasks(@Path("userId") int userId);
 
@@ -45,7 +47,8 @@ public interface ApiService {
 
     @PUT("api/Tasks/{taskId}")
     Call<TaskModel> updateTask(@Path("taskId") int taskId, @Body TaskModel taskModel);
-
+    @DELETE("api/Tasks/{id}")
+    Call<Void> deleteTask(@Path("id") int taskId);
     @GET("api/Plans/user/{userId}")
     Call<List<Plan>> getPlansByUser(@Path("userId") int userId);
 
