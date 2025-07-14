@@ -107,7 +107,6 @@ public class AddPlan extends DialogFragment {
             }
 
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-
             if (planToEdit == null) {
                 // Thêm mới
                 Plan newPlan = new Plan();
@@ -115,8 +114,7 @@ public class AddPlan extends DialogFragment {
                 newPlan.setDescription(desc);
                 newPlan.setStartDate(startDate);
                 newPlan.setEndDate(endDate);
-                newPlan.setUserId(userId); // Truyền userId
-
+                newPlan.setUserId(userId);
                 Call<Plan> call = apiService.createPlan(newPlan);
                 call.enqueue(new Callback<Plan>() {
                     @Override

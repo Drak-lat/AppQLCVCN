@@ -50,10 +50,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Nhập đủ tài khoản và mật khẩu!", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             User user = new User(username, password);
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-
             Call<LoginResponse> call = apiService.login(user);
             call.enqueue(new Callback<LoginResponse>() {
                 @Override
@@ -61,13 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         User user = response.body().getUser();
                         int userId = user.getId();
-
-                        // Lưu userId vào SharedPreferences (nếu cần)
-                        getSharedPreferences("user_prefs", MODE_PRIVATE)
-                                .edit()
-                                .putInt("userId", userId)
-                                .apply();
-
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, Menu.class);
                         intent.putExtra("userId", userId);

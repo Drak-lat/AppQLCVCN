@@ -43,13 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             // Tạo đối tượng User chỉ với email và password
             User user = new User(email, password);
-
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
             Call<User> call = apiService.register(user);
-
             call.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {

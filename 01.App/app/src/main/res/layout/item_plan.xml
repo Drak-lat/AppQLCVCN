@@ -39,7 +39,7 @@
                 android:id="@+id/imgEdit"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_priority"
+                android:src="@drawable/ic_edit"
                 android:padding="4dp"
                 android:contentDescription="Sửa kế hoạch"
                 android:layout_marginStart="6dp" />
@@ -48,7 +48,7 @@
                 android:id="@+id/imgDelete"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_task"
+                android:src="@drawable/ic_delete"
                 android:padding="4dp"
                 android:contentDescription="Xóa kế hoạch"
                 android:layout_marginStart="4dp" />

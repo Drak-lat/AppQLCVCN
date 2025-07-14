@@ -63,8 +63,7 @@ public class AccountFragment extends Fragment {
             Intent intent = new Intent(requireContext(), EditProfileActivity.class);
             intent.putExtra("userId", userId);
             startActivity(intent);
-            // Nếu cần hiệu ứng chuyển cảnh, gọi từ Activity:
-            //getActivity().overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
+            getActivity().overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
         });
 
         return view;

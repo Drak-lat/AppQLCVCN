@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quanlycongviecapp.Adapter.PlanAdapter;
+import com.example.quanlycongviecapp.Activity.TaskFragment;
 import com.example.quanlycongviecapp.Activity.AddPlan;
 import com.example.quanlycongviecapp.Model.Plan;
 import com.example.quanlycongviecapp.R;
@@ -28,23 +29,30 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PlanFragment extends Fragment {
-
-    private RecyclerView recyclerView;
+    private RecyclerView rvPlans;
     private PlanAdapter planAdapter;
     private List<Plan> planList = new ArrayList<>();
-    private int userId = -1; // Nhận từ Activity hoặc Bundle
+    private int userId = -1;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.plan, container, false);
-        recyclerView = view.findViewById(R.id.rvPlans);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPlans = view.findViewById(R.id.rvPlans);
+        rvPlans.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        // Lấy userId từ Activity chứa Fragment
+        if (getActivity() instanceof Menu) {
+            userId = ((Menu) getActivity()).getUserId();
+        }
+
+        // Khởi tạo adapter với callback
         planAdapter = new PlanAdapter(planList, new PlanAdapter.OnPlanClickListener() {
             @Override
             public void onPlanClick(Plan plan) {
-                // Nếu muốn: show detail plan
+                // Chuyển sang tab Công việc với planId
+                ((Menu) requireActivity()).openTaskTab(plan.getId());
             }
 
             @Override
@@ -55,7 +63,7 @@ public class PlanFragment extends Fragment {
 
             @Override
             public void onDelete(Plan plan) {
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(requireContext())
                         .setTitle("Xóa kế hoạch")
                         .setMessage("Bạn chắc chắn muốn xóa kế hoạch này?")
                         .setPositiveButton("Xóa", (dialog, which) -> {
@@ -63,13 +71,13 @@ public class PlanFragment extends Fragment {
                             api.deletePlan(plan.getId()).enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
-                                    Toast.makeText(getContext(), "Đã xóa!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "Đã xóa!", Toast.LENGTH_SHORT).show();
                                     loadPlans();
                                 }
 
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
-                                    Toast.makeText(getContext(), "Lỗi khi xóa!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "Lỗi khi xóa!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         })
@@ -77,16 +85,18 @@ public class PlanFragment extends Fragment {
                         .show();
             }
         });
-        recyclerView.setAdapter(planAdapter);
+        rvPlans.setAdapter(planAdapter);
 
-        // Lấy userId từ bundle hoặc activity nếu cần
-        userId = ((Menu) requireActivity()).getUserId();
-
+        // Tải danh sách kế hoạch
         loadPlans();
         return view;
     }
 
     private void loadPlans() {
+        if (userId < 0) {
+            Toast.makeText(requireContext(), "User chưa đăng nhập", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ApiService api = RetrofitClient.getClient().create(ApiService.class);
         api.getPlansByUser(userId).enqueue(new Callback<List<Plan>>() {
             @Override
@@ -94,13 +104,14 @@ public class PlanFragment extends Fragment {
                 planList.clear();
                 if (response.isSuccessful() && response.body() != null) {
                     planList.addAll(response.body());
+                } else {
+                    Toast.makeText(requireContext(), "Lấy danh sách kế hoạch thất bại", Toast.LENGTH_SHORT).show();
                 }
                 planAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onFailure(Call<List<Plan>> call, Throwable t) {
-                Toast.makeText(getContext(), "Lỗi load danh sách!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
